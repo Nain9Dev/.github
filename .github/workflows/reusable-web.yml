@@ -28,6 +28,11 @@ on:
         required: false
         default: true
         type: boolean
+      cache-dependency-path:
+        description: "Path to lockfile for caching (e.g. package-lock.json or frontend/package-lock.json)"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -45,7 +50,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node-version }}
-          cache: "npm"
+          cache: ${{ inputs.cache-dependency-path != '' && 'npm' || '' }}
+          cache-dependency-path: ${{ inputs.cache-dependency-path }}
 
       - name: Install dependencies
         run: ${{ inputs.install-command }}
