@@ -1,0 +1,50 @@
+name: Reusable .NET 10 Verification
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: "The .NET SDK version to setup"
+        required: false
+        default: "10.0.x"
+        type: string
+      solution-path:
+        description: "Optional path to solution or project file"
+        required: false
+        default: ""
+        type: string
+      run-format-check:
+        description: "Whether to enforce dotnet format check"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  verify-dotnet:
+    name: Verify .NET (${{ inputs.dotnet-version }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ inputs.solution-path }}
+
+      - name: Check code formatting
+        if: ${{ inputs.run-format-check }}
+        run: dotnet format ${{ inputs.solution-path }} --verify-no-changes
+
+      - name: Build solution (Release)
+        run: dotnet build ${{ inputs.solution-path }} --no-restore -c Release
+
+      - name: Run test suite
+        run: dotnet test ${{ inputs.solution-path }} --no-build -c Release --verbosity normal --collect:"XPlat Code Coverage"

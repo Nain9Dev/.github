@@ -1,0 +1,58 @@
+name: Reusable Web & Node Verification
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version to setup"
+        required: false
+        default: "22.x"
+        type: string
+      install-command:
+        description: "Command to install dependencies"
+        required: false
+        default: "npm ci"
+        type: string
+      test-command:
+        description: "Command to execute tests"
+        required: false
+        default: "npm test"
+        type: string
+      build-command:
+        description: "Command to execute build"
+        required: false
+        default: "npm run build"
+        type: string
+      run-build:
+        description: "Whether to run build step"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  verify-web:
+    name: Verify Web (${{ inputs.node-version }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: ${{ inputs.install-command }}
+
+      - name: Execute test suite
+        run: ${{ inputs.test-command }}
+
+      - name: Execute build
+        if: ${{ inputs.run-build }}
+        run: ${{ inputs.build-command }}
