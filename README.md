@@ -68,6 +68,34 @@ jobs:
       build-command: "npm run build"
 ```
 
-## Profile Templates
+### 4. GitHub Pages Deployment (`reusable-pages-deploy.yml`)
+
+Builds client applications under Node.js 24 LTS, optionally runs pre-flight test suites, configures GitHub Pages, and executes atomic artifact deployment with zero duplication across portfolio demos.
+
+```yaml
+name: Deploy Live Demo
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: Nain9Dev/.github/.github/workflows/reusable-pages-deploy.yml@main
+    with:
+      working-directory: "ProspectAI.Client"
+      dist-path: "dist"
+      build-command: "npm run build"
+      run-tests: false
+```
+
+## Governance & Maintenance
 
 - **[Default Pull Request Template](.github/pull_request_template.md)**: Enforces evidence-based delivery criteria (What changed, How verified, Unverified areas, Risk analysis) across all ecosystem repositories.
+- **[Grouped Dependabot Standard](.github/dependabot.yml)**: Weekly automated dependency updates grouped into single PRs per ecosystem (Actions, npm, pip, nuget), eliminating notification spam and PR fatigue.

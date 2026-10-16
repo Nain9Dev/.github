@@ -1,0 +1,92 @@
+name: Reusable GitHub Pages Deployment
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "The Node.js version to setup (defaults to LTS 24)"
+        required: false
+        default: "24"
+        type: string
+      working-directory:
+        description: "Working directory containing package.json (defaults to .)"
+        required: false
+        default: "."
+        type: string
+      build-command:
+        description: "The npm command to build static assets"
+        required: false
+        default: "npm run build"
+        type: string
+      dist-path:
+        description: "Path to built distribution files relative to working-directory"
+        required: false
+        default: "dist"
+        type: string
+      run-tests:
+        description: "Whether to execute automated unit/contract tests before building"
+        required: false
+        default: false
+        type: boolean
+      test-command:
+        description: "The test command to execute if run-tests is enabled"
+        required: false
+        default: "npm test"
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Static Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: "${{ inputs.working-directory }}/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.working-directory }}
+        run: npm ci
+
+      - name: Run verification test suite
+        if: ${{ inputs.run-tests }}
+        working-directory: ${{ inputs.working-directory }}
+        run: ${{ inputs.test-command }}
+
+      - name: Build client application
+        working-directory: ${{ inputs.working-directory }}
+        run: ${{ inputs.build-command }}
+
+      - name: Setup GitHub Pages configuration
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "${{ inputs.working-directory }}/${{ inputs.dist-path }}"
+
+  deploy:
+    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
