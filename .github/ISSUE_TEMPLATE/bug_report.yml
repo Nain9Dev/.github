@@ -1,0 +1,57 @@
+name: Bug Report
+description: Report a bug, test failure, or unexpected behavior
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please provide sufficient detail so the problem can be reproduced deterministically.
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe what happened.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal deterministic steps to reproduce the behavior.
+      placeholder: |
+        1. Run command '...'
+        2. Send request '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs Actual Behavior
+      description: What did you expect to happen versus what actually occurred?
+      placeholder: Expected 200 OK with valid schema, received 500 or validation fault.
+    validations:
+      required: true
+  - type: dropdown
+    id: ecosystem
+    attributes:
+      label: Affected Component / Language
+      options:
+        - ".NET 10 (C# / ASP.NET Core)"
+        - "Python 3.12 (FastAPI / Pydantic)"
+        - "TypeScript / Vue 3 / React 19"
+        - "3D Geometry / Khronos Conformance"
+        - "CI/CD / Infrastructure"
+        - "Other"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Info
+      description: OS version, runtime version, browser if applicable.
+      placeholder: Windows 11 / Ubuntu 24.04, .NET 10.0.100, Python 3.12.10
+    validations:
+      required: false

@@ -1,0 +1,44 @@
+name: Feature or Architecture Proposal
+description: Propose a new capability, architectural pattern, or enhancement
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposals should align with Clean Architecture, deterministic validation, and zero-cost infrastructure models.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement / Context
+      description: Is your proposal related to a problem or architectural limitation?
+      placeholder: A clear and concise description of the limitation or design challenge.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Detailed architectural or implementation proposal.
+      placeholder: Describe the solution, contracts, or changes to Domain/Application/Infrastructure layers.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches or design options were considered?
+      placeholder: Trade-offs evaluated.
+    validations:
+      required: false
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Architectural Compliance
+      options:
+        - label: Preserves Domain layer isolation (no external framework leaks).
+          required: true
+        - label: Follows deterministic invariants (no float money, strict validation).
+          required: true
+        - label: Adheres to the 0.00 € operational expense principle.
+          required: true
