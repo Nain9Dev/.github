@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#EDF1F6">
+  <title>NainDev Standards · Reusable GitHub Actions workflows</title>
+  <meta name="description" content="The shared CI for every NainDev repository: four reusable GitHub Actions workflows for .NET, Python, web builds and Pages deployment, plus the default pull request template and grouped Dependabot policy.">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="shell">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 18 11 6M10 18l7-12M16 18l4-7"/></svg>
+      <span>NainDev Standards</span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#workflows">Workflows</a>
+      <a href="#governance">Governance</a>
+      <a class="keep" href="https://github.com/Nain9Dev/.github">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="shell">
+    <span class="eyebrow">Reusable workflows · Default templates</span>
+    <h1>One CI definition, shared by every repository.</h1>
+    <p class="lead">Each NainDev project calls the same four reusable GitHub Actions workflows instead of copying its own pipeline. A fix to the shared workflow reaches every repository, and a new project gets a working CI in a few lines.</p>
+    <div class="actions">
+      <a class="btn primary" href="#workflows">See the workflows</a>
+      <a class="btn" href="https://github.com/Nain9Dev/.github">View the source</a>
+    </div>
+    <ul class="chips" aria-label="Key facts">
+      <li>4 reusable workflows</li>
+      <li>GitHub-hosted runners</li>
+      <li>Default PR template</li>
+      <li>Grouped Dependabot</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="workflows" aria-labelledby="workflows-title">
+  <div class="shell">
+    <h2 id="workflows-title">Four workflows to call</h2>
+    <p class="intro">All of them run on GitHub-managed <code>ubuntu-latest</code> runners. A repository adds a short workflow file that points at the shared one.</p>
+
+    <div class="cols wf">
+      <div>
+        <span class="tag">reusable-dotnet.yml</span>
+        <h3>.NET 10 verification</h3>
+        <p>Restores, optionally checks formatting, builds in Release and runs the test suites with coverage collection.</p>
+      </div>
+<pre><code>jobs:
+  test:
+    uses: Nain9Dev/.github/.github/workflows/reusable-dotnet.yml@main
+    with:
+      dotnet-version: "10.0.x"
+      run-format-check: false</code></pre>
+    </div>
+
+    <div class="cols wf">
+      <div>
+        <span class="tag">reusable-python.yml</span>
+        <h3>Python verification</h3>
+        <p>Sets up Python with pip caching, lints with Ruff and runs the tests with pytest or unittest.</p>
+      </div>
+<pre><code>jobs:
+  test:
+    uses: Nain9Dev/.github/.github/workflows/reusable-python.yml@main
+    with:
+      python-version: "3.12"
+      requirements-file: "requirements.txt"
+      test-command: "pytest -v"</code></pre>
+    </div>
+
+    <div class="cols wf">
+      <div>
+        <span class="tag">reusable-web.yml</span>
+        <h3>Web and Node verification</h3>
+        <p>Sets up Node.js LTS, caches dependencies, runs the tests and builds the production bundle.</p>
+      </div>
+<pre><code>jobs:
+  test:
+    uses: Nain9Dev/.github/.github/workflows/reusable-web.yml@main
+    with:
+      node-version: "22.x"
+      test-command: "npm test"
+      build-command: "npm run build"</code></pre>
+    </div>
+
+    <div class="cols wf">
+      <div>
+        <span class="tag">reusable-pages-deploy.yml</span>
+        <h3>GitHub Pages deployment</h3>
+        <p>Builds a client under Node.js 24 LTS, optionally runs pre-flight tests, configures Pages and deploys the artifact in one step. The live demos reuse it instead of repeating the steps.</p>
+      </div>
+<pre><code>permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: Nain9Dev/.github/.github/workflows/reusable-pages-deploy.yml@main
+    with:
+      working-directory: "ProspectAI.Client"
+      dist-path: "dist"
+      build-command: "npm run build"
+      run-tests: false</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="governance" aria-labelledby="governance-title">
+  <div class="shell">
+    <h2 id="governance-title">Defaults every repository inherits</h2>
+    <p class="intro">Community files in this repository apply to every NainDev repository that does not define its own.</p>
+    <div class="grid">
+      <article class="card">
+        <span class="tag">Pull request template</span>
+        <h3>Evidence, not description</h3>
+        <p>Asks every change for what changed, how it was verified, what is unverified and the risk, so a reviewer starts from the facts.</p>
+      </article>
+      <article class="card">
+        <span class="tag">Dependabot</span>
+        <h3>Grouped weekly updates</h3>
+        <p>One pull request per ecosystem each week across Actions, npm, pip and NuGet, instead of a stream of single-package PRs.</p>
+      </article>
+      <article class="card">
+        <span class="tag">Community files</span>
+        <h3>Issues, security and conduct</h3>
+        <p>Bug report and feature request forms, a security policy, a code of conduct and contributing guidelines.</p>
+      </article>
+    </div>
+    <p class="note">Calling a workflow with <code>@main</code> follows the latest shared version. A repository that needs a frozen pipeline can pin the reference to a commit instead.</p>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <span>By Aitor Nain Mendoza Vallejo · MIT licence.</span>
+    <span><a href="https://github.com/Nain9Dev/.github">GitHub</a> · <a href="https://handbook.naindev.com">Engineering Handbook</a> · <a href="https://www.naindev.com">naindev.com</a></span>
+  </div>
+</footer>
+</body>
+</html>
