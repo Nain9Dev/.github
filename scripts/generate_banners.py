@@ -198,6 +198,24 @@ PROJECTS: List[ProjectMeta] = [
         domain="status.naindev.com",
         target_dir=Path("d:/Development/Personal-Projects/status/docs/assets"),
     ),
+    ProjectMeta(
+        id="naindev-portfolio",
+        name="NainDev Portfolio",
+        tagline="Full Stack Architecture, Deterministic Conformance & 3D Interactive Showcase",
+        stack="Astro 5 · Strict TypeScript · Architectural CSS Tokens · Three.js · 0.00 €",
+        metrics=["100% WCAG 2.2 AA", "Sub-50ms SSG Delivery", "Bilingual Sync Engine"],
+        domain="naindev.com",
+        target_dir=Path("d:/Development/Personal-Projects/nain9dev.github.io/docs/assets"),
+    ),
+    ProjectMeta(
+        id="brandbook",
+        name="NainDev Brandbook & Design System",
+        tagline="Visual Identity Specifications, Geometric Logo Mathematics & Design Tokens",
+        stack="CSS Variables · WCAG 2.1 AAA · Static Edge Delivery · Zero Cost · 0.00 €",
+        metrics=["14.0% Stroke Ratio", "52.0° Traversal Angle", "100% WCAG 2.1 AAA"],
+        domain="brand.naindev.com",
+        target_dir=Path("d:/Development/Personal-Projects/brandbook/docs/assets"),
+    ),
 ]
 
 
