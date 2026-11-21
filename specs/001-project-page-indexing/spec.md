@@ -24,6 +24,8 @@ Notation: EARS.
 - **REQ-IDX-005** — The site shall publish `/sitemap.xml` listing only the page URL.
 - **REQ-IDX-006** — The site shall publish `/robots.txt` that allows crawling and
   names the sitemap.
+- **REQ-IDX-007** — The site shall publish `/llms.txt`, a short plain-text summary
+  of the project for AI answer engines, derived from the page description.
 
 ## Out of scope
 

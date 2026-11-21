@@ -1,0 +1,7 @@
+# .github
+
+> The shared CI for every NainDev repository: reusable GitHub Actions workflows for .NET, Python, web and Pages, a pull request template and a Dependabot policy.
+
+- Page: https://standards.naindev.com/
+- Source code: https://github.com/Nain9Dev/.github
+- Author: https://www.naindev.com/
