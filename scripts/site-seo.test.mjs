@@ -40,6 +40,13 @@ test("sitemap lists the page URL and nothing else (REQ-IDX-005)", () => {
   assert.deepEqual(locs, [ORIGIN]);
 });
 
+test("llms.txt summarises the project for AI answer engines (REQ-IDX-007)", () => {
+  const llms = readFileSync(new URL("../site/llms.txt", import.meta.url), "utf8");
+  assert.match(llms, /^# .+\n\n> .+/);
+  assert.ok(llms.includes("https://github.com/Nain9Dev/.github"));
+  assert.ok(llms.includes(ORIGIN));
+});
+
 test("robots.txt allows crawling and points to the sitemap (REQ-IDX-006)", () => {
   assert.match(robots, /^Allow: \/$/m);
   assert.ok(robots.includes(`Sitemap: ${ORIGIN}sitemap.xml`));
