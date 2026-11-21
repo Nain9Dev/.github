@@ -1,0 +1,30 @@
+name: Site indexing
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "site/**"
+      - "scripts/site-seo.test.mjs"
+      - ".github/workflows/site-seo.yml"
+  pull_request:
+    paths:
+      - "site/**"
+      - "scripts/site-seo.test.mjs"
+      - ".github/workflows/site-seo.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  site-seo:
+    name: Project page indexing
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: node --test scripts/site-seo.test.mjs
